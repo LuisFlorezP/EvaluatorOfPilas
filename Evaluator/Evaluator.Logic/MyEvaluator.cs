@@ -22,16 +22,33 @@
                 }
                 else
                 {
-                    var number = ToDouble(postfix[i]);
+                    int index = i;
+                    int length = 1;
+                    i++;
+                    while (true)
+                    {
+                        if (postfix[i] != 'N')
+                        {
+                            length++;
+                            i++;
+                        }
+                        else
+                        {
+                            i++;
+                            break;
+                        }
+                    }
+                    string figure = string.Empty;
+                    for (int j = index; j < length + index; j++)
+                    {
+                        figure += postfix[j];
+                    }
+                    var number = (double)Convert.ToDouble(figure);
                     stack.Push(number);
+                    i--;
                 }
             }
             return stack.Pop();
-        }
-
-        private static double ToDouble(char number)
-        {
-            return (double)number - 48;
         }
 
         private static double Calculate(double number1, char @operator, double number2)
@@ -85,7 +102,34 @@
                 }
                 else
                 {
-                    postfix += infix[i];
+                    if (i != infix.Length - 1) 
+                    {
+                        int index = i;
+                        int lenght = 1;
+                        i++;
+                        while (infix[i] != '(' && infix[i] != ')' && infix[i] != '^' && infix[i] != '/' && infix[i] != '*' && infix[i] != '+' && infix[i] != '-')
+                        {
+                            if (i == infix.Length - 1)
+                            {
+                                lenght++;
+                                i++;
+                                break;
+                            }
+                            lenght++;
+                            i++;
+                        }
+                        for (int j = index; j < lenght + index; j++)
+                        {
+                            postfix += infix[j];
+                        }
+                        postfix += 'N';
+                        i--;
+                    }
+                    else
+                    {
+                        postfix += infix[i];
+                        postfix += 'N';
+                    }
                 }
             }
             while (!stack.IsEmpty)
